@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   API_URL,
   // headers
-} from '../util/auth';
+} from "../util/auth";
 
 export const signUpUser = async (email, password, nick) => {
   try {
@@ -26,7 +26,7 @@ export const loginUser = async (email, password) => {
       password,
     });
 
-    localStorage.setItem('token', response.data);
+    localStorage.setItem("token", response.data);
     return response.data;
   } catch (error) {
     // throw new Error("로그인 실패: " + error.response.data);
@@ -39,11 +39,11 @@ export const logoutUser = async () => {
     const response = await axios.get(`${API_URL}/user/verify`);
     const { login } = response.data;
     if (login) {
-      localStorage.removeItem('token');
-      alert('로그아웃 성공!');
+      localStorage.removeItem("token");
+      alert("로그아웃 성공!");
       return;
     } else {
-      throw new Error('로그인 상태가 아닙니다. 로그인을 먼저 하세요.');
+      throw new Error("로그인 상태가 아닙니다. 로그인을 먼저 하세요.");
     }
   } catch (error) {
     // throw new Error("로그아웃 실패: " + error.message);
@@ -52,7 +52,7 @@ export const logoutUser = async () => {
 };
 
 export const myInfoFetch = async () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -66,9 +66,9 @@ export const myInfoFetch = async () => {
     throw new Error(error.response.data.error);
   }
 };
-
+//내포켓몬 보기
 export const myPokeFetch = async () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -76,6 +76,7 @@ export const myPokeFetch = async () => {
     const response = await axios.get(`${API_URL}/myPokemon/mypokemon`, {
       headers,
     });
+
     return response.data;
   } catch (error) {
     // throw new Error("소유한 포켓몬을 가져오는데 실패했습니다.");

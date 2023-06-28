@@ -1,26 +1,27 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   API_URL,
   // headers
-} from '../util/auth';
+} from "../util/auth";
 
-const token = localStorage.getItem('token');
+const token = localStorage.getItem("token");
 const headers = {
   Authorization: `Bearer ${token}`,
 };
-
+//포켓몬 세부정보
 export const pokemonDetail = async (id) => {
   try {
     const response = await axios.get(`${API_URL}/pokemon/dbidsearch?id=${id}`, {
       headers,
     });
+
     return response.data;
   } catch (error) {
     // throw new Error("포켓몬 정보를 가져오는데 실패했습니다.");
     throw new Error(error.response.data.error);
   }
 };
-
+//포켓몬 잡기
 export const pokemonCatch = async (pokeid) => {
   try {
     const response = await axios.post(
@@ -35,7 +36,7 @@ export const pokemonCatch = async (pokeid) => {
     throw new Error(error.response.data.error);
   }
 };
-
+//포켓몬 이름으로 찾기
 export const pokemonSearch = async (pokename) => {
   try {
     const response = await axios.get(
@@ -48,7 +49,7 @@ export const pokemonSearch = async (pokename) => {
     throw new Error(error.response.data.error);
   }
 };
-
+//전체 포켓몬
 export const getPokemons = async () => {
   try {
     const response = await axios.get(`${API_URL}/pokemon/page`, {
@@ -61,7 +62,7 @@ export const getPokemons = async () => {
     throw new Error(error.response.data.error);
   }
 };
-
+//육성페이지
 export const pokeStatus = async (pokeid) => {
   try {
     const response = await axios.get(
@@ -70,19 +71,32 @@ export const pokeStatus = async (pokeid) => {
         headers,
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.error);
   }
 };
 
-export const pokeCleanliness = async (pokeid, cleanliness) => {
+//포만도
+export const pokeFull = async (pokeid, full) => {
   try {
-    const response = await axios.fetch(
-      `${API_URL}/myPokemon/cleanliness`,
-      { pokeid },
-      { cleanliness },
+    const response = await axios.patch(
+      `${API_URL}/bringup/pokefull`,
+      { pokeid, full },
+      { headers }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.error);
+  }
+};
+//친밀도
+export const pokeIntimate = async (pokeid, intimate) => {
+  try {
+    const response = await axios.patch(
+      `${API_URL}/bringup/pokelike`,
+      { pokeid, intimate },
       { headers }
     );
     return response.data;
@@ -90,27 +104,12 @@ export const pokeCleanliness = async (pokeid, cleanliness) => {
     throw new Error(error.response.data.error);
   }
 };
-
-export const pokeMomentum = async (pokeid, momentum) => {
+//청결도
+export const pokeClean = async (pokeid, clean) => {
   try {
-    const response = await axios.fetch(
-      `${API_URL}/myPokemon/momentum`,
-      { pokeid },
-      { momentum },
-      { headers }
-    );
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response.data.error);
-  }
-};
-
-export const pokeSatitety = async (pokeid, satitety) => {
-  try {
-    const response = await axios.fetch(
-      `${API_URL}/myPokemon/satitety`,
-      { pokeid },
-      { satitety },
+    const response = await axios.patch(
+      `${API_URL}/bringup/pokeclean`,
+      { pokeid, clean },
       { headers }
     );
     return response.data;

@@ -1,11 +1,13 @@
-import React from "react";
 import PropTypes from "prop-types";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import { useState } from "react";
+import { useHistory } from "react-router-dom";
+//진화 API
+// import { evolution } from "../../../api/pokemonAPI";
 
-const CustomModal = ({
+const EvolutionModal = ({
   isOpen,
   onClose,
   title,
@@ -13,6 +15,19 @@ const CustomModal = ({
   isError,
   imageSrc,
 }) => {
+  const history = useHistory();
+  const [pokemon, setEvolutionPokemon] = useState();
+
+  const handleClick = async () => {
+    try {
+      const evolvedPokemon = await evolution(pokemon);
+      setEvolutionPokemon(evolvedPokemon);
+      history.push("/bringUp?pokeid=${pokeid}"); // 진화후 페이지
+    } catch (error) {
+      console.error("Error while evolving Pokémon:", error);
+    }
+  };
+
   return (
     <Modal
       open={isOpen}
@@ -40,17 +55,23 @@ const CustomModal = ({
         {imageSrc && <img src={imageSrc} alt="Modal Image" />}
         <Typography id="custom-modal-description">{message}</Typography>
         <button
+          onClick={handleClick}
+          className={isError ? "nes-btn is-error" : "nes-btn is-success"}
+        >
+          진 화
+        </button>
+        <button
           onClick={onClose}
           className={isError ? "nes-btn is-error" : "nes-btn is-success"}
         >
-          확인
+          취 소
         </button>
       </Box>
     </Modal>
   );
 };
 
-CustomModal.propTypes = {
+EvolutionModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
@@ -59,4 +80,4 @@ CustomModal.propTypes = {
   imageSrc: PropTypes.string,
 };
 
-export default CustomModal;
+export default EvolutionModal;
